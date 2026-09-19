@@ -19,6 +19,8 @@ class Trie {
 
     void liberar(Node *node);
     bool removerRecursivo(Node* no, const std::string& palavra, size_t indice);
+    void imprimirRecursivo(const Node* no, int nivel) const;
+    void coletarPalavras(const Node* no, const std::string& palavraAtual, std::vector<std::string>& palavras) const;
 
     public: 
       Trie();

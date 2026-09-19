@@ -1,7 +1,7 @@
-#include "lib/trie.hpp"
-#include "lib/treap.hpp"
-#include "lib/splay.hpp"
-#include "lib/kdTree.hpp"
+#include "trie.hpp"
+#include "treap.hpp"
+#include "splay.hpp"
+#include "kdTree.hpp"
 #include "patricia.hpp"
 
 
