@@ -6,6 +6,7 @@ CXX := g++
 
 CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -g -MMD -MP
 CPPFLAGS := -Ilib
+BENCH_CXXFLAGS := -std=c++17 -Wall -Wextra -Wpedantic -O2
 
 
 # ============================================================
@@ -42,7 +43,7 @@ APP := $(BIN_DIR)/arvores
 # ============================================================
 
 # Detecta automaticamente qualquer .cpp dentro de tests/
-TEST_SRCS := $(wildcard $(TEST_DIR)/*.cpp)
+TEST_SRCS := $(filter-out $(TEST_DIR)/benchmark.cpp,$(wildcard $(TEST_DIR)/*.cpp))
 
 # Exemplo:
 # tests/tests_trie.cpp -> bin/tests_trie
@@ -131,15 +132,23 @@ run-%: $(BIN_DIR)/%
 
 
 # ============================================================
-# Benchmark
-#
-# Se existir tests/benchmark.cpp:
-# make benchmark
+# Benchmark (compilado com otimização -O2)
 # ============================================================
+
+$(BIN_DIR)/benchmark: $(TEST_DIR)/benchmark.cpp $(LIB_SRCS) | $(BIN_DIR)
+	$(CXX) $(CPPFLAGS) $(BENCH_CXXFLAGS) $< $(LIB_SRCS) -o $@
 
 .PHONY: benchmark
 benchmark: $(BIN_DIR)/benchmark
 	./$(BIN_DIR)/benchmark
+
+# ============================================================
+# Geração dos gráficos a partir do CSV
+# ============================================================
+
+.PHONY: graphs
+graphs:
+	python3 scripts/graficos.py
 
 
 # ============================================================
