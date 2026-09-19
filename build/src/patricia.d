@@ -1,1 +1,2 @@
-build/src/patricia.o: src/patricia.cpp
+build/src/patricia.o: src/patricia.cpp lib/patricia.hpp
+lib/patricia.hpp:
