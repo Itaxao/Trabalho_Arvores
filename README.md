@@ -8,23 +8,30 @@ Implementação e análise experimental de cinco estruturas de dados hierárquic
 - Treap (Tree + Heap);
 - KD-Tree bidimensional.
 
-O projeto foi desenvolvido para comparar diferentes estratégias de organização, busca, reorganização e indexação de dados. Além das implementações, o repositório contém testes funcionais, benchmark reproduzível, resultados em CSV e um script em Python para geração dos gráficos utilizados na análise experimental.
+O projeto foi desenvolvido para comparar diferentes estratégias de organização, busca, reorganização e indexação de dados. Além das implementações, o repositório contém testes funcionais, benchmark reproduzível, resultados em CSV e scripts para geração dos gráficos e diagramas utilizados no relatório.
+
+**Repositório:** https://github.com/Itaxao/Trabalho_Arvores
 
 ## Estrutura do projeto
 
 ```text
 .
-├── lib/                 # Arquivos de cabeçalho (.hpp)
-├── src/                 # Implementações (.cpp)
-│   └── main.cpp         # Executável principal mínimo
-├── tests/               # Testes funcionais e benchmark
-├── scripts/             # Geração dos gráficos em Python
+├── lib/                    # Arquivos de cabeçalho (.hpp)
+├── src/                    # Implementações (.cpp)
+│   └── main.cpp            # Executável principal mínimo
+├── tests/                  # Testes funcionais e benchmark
+├── scripts/
+│   ├── graficos.py         # Gráficos do benchmark
+│   └── diagramas.py        # Diagramas estruturais das árvores
 ├── resultados/
-│   ├── benchmark.csv    # Resultados experimentais
-│   └── graficos/        # Gráficos gerados a partir do CSV
+│   ├── benchmark.csv       # Resultados experimentais
+│   ├── graficos/           # Gráficos gerados a partir do CSV
+│   └── diagramas/          # Estados visuais das estruturas
 ├── Makefile
 └── README.md
 ```
+
+O relatório acadêmico é entregue separadamente e referencia este repositório. Por isso ele não precisa permanecer em uma pasta `docs/` dentro do GitHub.
 
 ## Requisitos
 
@@ -39,18 +46,24 @@ Para gerar os gráficos:
 - pandas;
 - matplotlib.
 
+Para gerar os diagramas estruturais:
+
+- Graphviz (`dot`);
+- pacote Python `graphviz`.
+
 ### Ambiente Nix/NixOS
 
-É possível abrir um ambiente temporário com todas as dependências usando:
+É possível abrir um ambiente temporário com as dependências usando:
 
 ```bash
-nix-shell -p gcc gnumake python3 python3Packages.pandas python3Packages.matplotlib
+nix-shell -p gcc gnumake graphviz python3 \
+  python3Packages.pandas python3Packages.matplotlib python3Packages.graphviz
 ```
 
-Em outras distribuições, instale `g++`, `make` e Python 3 pelo gerenciador de pacotes da distribuição. Para as bibliotecas Python, uma opção é:
+Em outras distribuições, instale `g++`, `make`, Python 3 e Graphviz pelo gerenciador de pacotes. Para os pacotes Python, uma opção é:
 
 ```bash
-python3 -m pip install pandas matplotlib
+python3 -m pip install pandas matplotlib graphviz
 ```
 
 ## Compilação
@@ -73,7 +86,7 @@ Para executá-lo:
 make run
 ```
 
-O `main.cpp` foi mantido propositalmente mínimo. As demonstrações das estruturas estão nos testes individuais.
+O `main.cpp` foi mantido propositalmente mínimo. As demonstrações das estruturas estão nos testes individuais e nas visualizações versionadas em `resultados/`.
 
 ## Testes funcionais
 
@@ -99,7 +112,7 @@ make run-tests_treap
 make run-tests_kdtree
 ```
 
-Os testes verificam operações fundamentais, casos de remoção e manutenção das propriedades específicas de cada estrutura.
+Os testes verificam operações fundamentais, casos de remoção e manutenção das propriedades específicas de cada estrutura. Eles servem principalmente para validar a corretude das implementações durante o desenvolvimento.
 
 ## Benchmark
 
@@ -127,7 +140,7 @@ O CSV contém a estrutura, operação, padrão de entrada, tamanho do conjunto, 
 
 ## Geração dos gráficos
 
-Depois de executar o benchmark, gere os gráficos com:
+Depois de executar o benchmark:
 
 ```bash
 make graphs
@@ -145,15 +158,43 @@ As imagens são salvas em:
 resultados/graficos/
 ```
 
-As comparações são separadas por domínio para evitar uma comparação direta inadequada entre estruturas que recebem tipos de dados diferentes:
+As comparações são separadas por domínio:
 
 - Trie x Patricia;
 - Treap x Splay;
 - KD-Tree em diferentes distribuições espaciais.
 
+## Geração dos diagramas estruturais
+
+Para reproduzir as representações visuais das árvores:
+
+```bash
+make diagrams
+```
+
+ou:
+
+```bash
+python3 scripts/diagramas.py
+```
+
+Os arquivos são gerados em:
+
+```text
+resultados/diagramas/
+```
+
+Para gerar gráficos e diagramas de uma vez:
+
+```bash
+make visuals
+```
+
+Os diagramas mostram estados relevantes das estruturas, incluindo compartilhamento e compactação de prefixos, rotações/reorganizações e alternância dos eixos da KD-Tree.
+
 ## Limpeza e recompilação
 
-Para remover arquivos gerados de compilação:
+Para remover os arquivos de compilação:
 
 ```bash
 make clean
@@ -175,6 +216,8 @@ A Splay mantém ponteiros para o pai e utiliza rotações Zig, Zag, Zig-Zig, Zag
 
 A KD-Tree implementada é bidimensional. A dimensão de comparação alterna entre X e Y conforme a profundidade da árvore.
 
-## Resultados
+## Resultados e relatório
 
-Os resultados experimentais utilizados no relatório estão versionados em `resultados/benchmark.csv` e os gráficos correspondentes em `resultados/graficos/`. A interpretação deve considerar as propriedades e o domínio de cada estrutura, e não apenas o menor tempo absoluto.
+Os resultados experimentais utilizados no relatório estão versionados em `resultados/benchmark.csv`; os gráficos estão em `resultados/graficos/` e os estados estruturais em `resultados/diagramas/`.
+
+O relatório é entregue separadamente em PDF/LaTeX e inclui o link deste repositório nas referências. Isso mantém o GitHub focado no código e nos artefatos necessários para reproduzir os experimentos e as visualizações.
